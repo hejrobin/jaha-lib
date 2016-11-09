@@ -1,0 +1,30 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+/log/*
+!/log/.keep
+/tmp
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Tests
+lib-cov
+coverage
+
+# Assets
+.grunt
+.lock-wscript
+build/Release
+node_modules
+.npm
+.node_repl_history
+/.bundle
+
+# Directory cache files
+.DS_Store
+Thumbs.db
+ehthumbs.db
