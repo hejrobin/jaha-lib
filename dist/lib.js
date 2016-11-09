@@ -19,8 +19,12 @@ var JahaApiLib = function () {
 	_createClass(JahaApiLib, [{
 		key: 'authExpired',
 		get: function get() {
+			if (this.authExpiresAt === null) {
+				return true;
+			}
+
 			var currentTimestamp = Math.floor(Date.now() / 1000);
-			return currentTimestamp > this.authExpire;
+			return currentTimestamp > this.authExpiresAt;
 		}
 	}]);
 
@@ -66,10 +70,14 @@ var JahaApiLib = function () {
 			var username = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 			var password = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
+			if (this.authToken && !this.authExpired) {
+				return Promise.resolve(true);
+			}
+
 			var endpoint = this.toEndpoint('auth');
 			var request = { headers: this.toHeaders() };
 
-			if (!this.authToken) {
+			if (this.authToken === null) {
 				request.method = 'POST';
 				request.body = this.toPayload({
 					"username": username,
@@ -81,15 +89,15 @@ var JahaApiLib = function () {
 				endpoint = this.toEndpoint('auth/refresh');
 			}
 
-			return fetch(endpoint, {
-				headers: this.toHeaders()
-			}).then(function (response) {
+			return fetch(endpoint, request).then(function (response) {
 				return response.json();
 			}).then(function (json) {
 				if (json.token) {
 					_this.authToken = json.token;
-					_this.authExpire = Date.parse(json.expire).getTime() / 1000;
+					_this.authExpiresAt = Date.parse(json.expire) / 1000;
+					return true;
 				}
+				return false;
 			});
 		}
 	}, {

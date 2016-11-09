@@ -15,8 +15,12 @@ export default class JahaApiLib {
 	}
 
 	get authExpired() {
+		if (this.authExpiresAt === null) {
+			return true;
+		}
+		
 		let currentTimestamp = Math.floor(Date.now() / 1000);
-		return currentTimestamp > this.authExpire;
+		return currentTimestamp > this.authExpiresAt;
 	}
 
 	constructor() {
@@ -40,10 +44,14 @@ export default class JahaApiLib {
 	}
 
 	authenticate(username = null, password = null) {
+		if (this.authToken && !this.authExpired) {
+			return Promise.resolve(true);
+		}
+		
 		let endpoint = this.toEndpoint('auth');
 		let request = { headers: this.toHeaders() };
 
-		if (!this.authToken) {
+		if (this.authToken === null) {
 			request.method = 'POST';
 			request.body = this.toPayload({
 				"username": username,
@@ -55,15 +63,15 @@ export default class JahaApiLib {
 			endpoint = this.toEndpoint('auth/refresh');
 		}
 
-		return fetch(endpoint, {
-			headers: this.toHeaders()
-		}).then((response) => {
+		return fetch(endpoint, request).then((response) => {
 			return response.json();
 		}).then((json) => {
 			if(json.token) {
 				this.authToken = json.token;
-				this.authExpire = Date.parse(json.expire).getTime() / 1000;
+				this.authExpiresAt = Date.parse(json.expire) / 1000;
+				return true;
 			}
+			return false;
 		});
 	}
 
