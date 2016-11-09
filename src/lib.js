@@ -55,7 +55,7 @@ export default class JahaApiLib {
 			endpoint = this.toEndpoint('auth/refresh');
 		}
 
-		return fetch(this.toEndpoint('auth/refresh'), {
+		return fetch(endpoint, {
 			headers: this.toHeaders()
 		}).then((response) => {
 			return response.json();

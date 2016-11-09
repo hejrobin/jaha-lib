@@ -81,7 +81,7 @@ var JahaApiLib = function () {
 				endpoint = this.toEndpoint('auth/refresh');
 			}
 
-			return fetch(this.toEndpoint('auth/refresh'), {
+			return fetch(endpoint, {
 				headers: this.toHeaders()
 			}).then(function (response) {
 				return response.json();
