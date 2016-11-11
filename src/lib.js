@@ -78,7 +78,10 @@ export default class JahaApiLib {
 	get(endpoint, additionalHeaders = {}) {
 		return this.authenticate().then(() => {
 			return fetch(this.toEndpoint(endpoint), {
-				headers: this.toHeaders(additionalHeaders)
+				headers: this.toHeaders(additionalHeaders),
+				type: 'cors'
+			}).then((response) => {
+				return response.json();
 			})
 		});
 	}
@@ -88,7 +91,10 @@ export default class JahaApiLib {
 			return fetch(this.toEndpoint(endpoint), {
 				method: 'POST',
 				headers: this.toHeaders(additionalHeaders),
-				body: this.toPayload(payload)
+				body: this.toPayload(payload),
+				type: 'cors'
+			}).then((response) => {
+				return response.json();
 			})
 		});
 	}
@@ -98,7 +104,36 @@ export default class JahaApiLib {
 			return fetch(this.toEndpoint(endpoint), {
 				method: 'PATCH',
 				headers: this.toHeaders(additionalHeaders),
-				body: this.toPayload(payload)
+				body: this.toPayload(payload),
+				type: 'cors'
+			}).then((response) => {
+				return response.json();
+			})
+		});
+	}
+	
+	put(endpoint, payload, additionalHeaders = {}) {
+		return this.authenticate().then(() => {
+			return fetch(this.toEndpoint(endpoint), {
+				method: 'PUT',
+				headers: this.toHeaders(additionalHeaders),
+				body: this.toPayload(payload),
+				type: 'cors'
+			}).then((response) => {
+				return response.json();
+			})
+		});
+	}
+
+	delete(endpoint, payload, additionalHeaders = {}) {
+		return this.authenticate().then(() => {
+			return fetch(this.toEndpoint(endpoint), {
+				method: 'DELETE',
+				headers: this.toHeaders(additionalHeaders),
+				body: this.toPayload(payload),
+				type: 'cors'
+			}).then((response) => {
+				return response.json();
 			})
 		});
 	}

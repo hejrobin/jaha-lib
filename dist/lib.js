@@ -109,7 +109,10 @@ var JahaApiLib = function () {
 
 			return this.authenticate().then(function () {
 				return fetch(_this2.toEndpoint(endpoint), {
-					headers: _this2.toHeaders(additionalHeaders)
+					headers: _this2.toHeaders(additionalHeaders),
+					type: 'cors'
+				}).then(function (response) {
+					return response.json();
 				});
 			});
 		}
@@ -124,7 +127,10 @@ var JahaApiLib = function () {
 				return fetch(_this3.toEndpoint(endpoint), {
 					method: 'POST',
 					headers: _this3.toHeaders(additionalHeaders),
-					body: _this3.toPayload(payload)
+					body: _this3.toPayload(payload),
+					type: 'cors'
+				}).then(function (response) {
+					return response.json();
 				});
 			});
 		}
@@ -139,7 +145,46 @@ var JahaApiLib = function () {
 				return fetch(_this4.toEndpoint(endpoint), {
 					method: 'PATCH',
 					headers: _this4.toHeaders(additionalHeaders),
-					body: _this4.toPayload(payload)
+					body: _this4.toPayload(payload),
+					type: 'cors'
+				}).then(function (response) {
+					return response.json();
+				});
+			});
+		}
+	}, {
+		key: 'put',
+		value: function put(endpoint, payload) {
+			var _this5 = this;
+
+			var additionalHeaders = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+			return this.authenticate().then(function () {
+				return fetch(_this5.toEndpoint(endpoint), {
+					method: 'PUT',
+					headers: _this5.toHeaders(additionalHeaders),
+					body: _this5.toPayload(payload),
+					type: 'cors'
+				}).then(function (response) {
+					return response.json();
+				});
+			});
+		}
+	}, {
+		key: 'delete',
+		value: function _delete(endpoint, payload) {
+			var _this6 = this;
+
+			var additionalHeaders = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+			return this.authenticate().then(function () {
+				return fetch(_this6.toEndpoint(endpoint), {
+					method: 'DELETE',
+					headers: _this6.toHeaders(additionalHeaders),
+					body: _this6.toPayload(payload),
+					type: 'cors'
+				}).then(function (response) {
+					return response.json();
 				});
 			});
 		}
